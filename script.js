@@ -1,12 +1,10 @@
 import { annotate } from "https://unpkg.com/rough-notation?module";
 
-// Select elements
 const nameEl = document.querySelector("#name");
 const timeLine = document.querySelector("#time-line");
 const stack = document.querySelector("#full-stack");
 const creative = document.querySelector("#creative");
 
-// Create annotations
 const annotation = annotate(nameEl, {
   type: "box",
   color: "blue",
@@ -32,10 +30,8 @@ const line = annotate(timeLine, {
   animationDuration: 800,
 });
 
-// Show only name annotation immediately
 annotation.show();
 
-// Show others when in view
 const observer = new IntersectionObserver((entries, obs) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
@@ -51,7 +47,6 @@ observer.observe(stack);
 observer.observe(creative);
 observer.observe(timeLine);
 
-// 🔁 Refresh all annotations on layout changes
 function refreshAllAnnotations() {
   annotation.hide(); annotation.show();
   st.hide(); st.show();
@@ -61,7 +56,6 @@ function refreshAllAnnotations() {
 
 window.addEventListener("resize", refreshAllAnnotations);
 
-// Optional: refresh after Bootstrap navbar toggle
 const navbarCollapse = document.getElementById("navbarColor03");
 if (navbarCollapse) {
   navbarCollapse.addEventListener("transitionend", refreshAllAnnotations);
