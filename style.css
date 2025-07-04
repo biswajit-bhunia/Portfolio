@@ -135,7 +135,9 @@ nav {
     font-size: 1.3rem;
   }
 }
-
+#tagline{
+  font-weight: 500;
+}
 #about-me {
   margin-top: 8rem;
 }
