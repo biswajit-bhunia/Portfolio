@@ -1,10 +1,7 @@
-// import { annotate } from 'rough-notation';
-// Or using unpkg
 import { annotate } from "https://unpkg.com/rough-notation?module";
 
 const e = document.querySelector("#name");
 const timeLine = document.querySelector("#time-line");
-const year = document.querySelector("#year");
 const stack = document.querySelector("#full-stack");
 const creative = document.querySelector("#creative");
 const annotation = annotate(e, {
@@ -14,14 +11,32 @@ const annotation = annotate(e, {
   animationDuration: 1000,
 });
 annotation.show();
-const line = annotate(timeLine, { type: "underline" });
-line.show();
-const yr = annotate(year, { type: "underline", color: "#34e394" });
-yr.show();
-const st = annotate(stack, { type: "circle", color: "#a0f24e" });
-st.show();
-const c = annotate(creative, { type: "box", color: "#ff8f66" });
-c.show();
+
+
+const st = annotate(stack, { type: "circle", color: "#30ffcf", animationDuration: 800 });
+const c = annotate(creative, { type: "box", color: "#ff8f66", animationDuration: 800 });
+const line = annotate(timeLine, { type: "underline", color: "#6e81ff", animationDuration: 800 });
+
+const observer = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      if (entry.target === stack) st.show();
+      if (entry.target === creative) c.show();
+      if (entry.target === timeLine) line.show();
+
+      // Optional: stop observing once shown
+      obs.unobserve(entry.target);
+    }
+  });
+}, {
+  threshold: 0.5 // Adjust if needed
+});
+
+observer.observe(stack);
+observer.observe(creative);
+observer.observe(timeLine);
+
+
 
 new TypeIt("#tagline", {
   speed: 90,
