@@ -1,40 +1,72 @@
 import { annotate } from "https://unpkg.com/rough-notation?module";
 
-const e = document.querySelector("#name");
+// Select elements
+const nameEl = document.querySelector("#name");
 const timeLine = document.querySelector("#time-line");
 const stack = document.querySelector("#full-stack");
 const creative = document.querySelector("#creative");
-const annotation = annotate(e, {
+
+// Create annotations
+const annotation = annotate(nameEl, {
   type: "box",
   color: "blue",
   iterations: 1,
   animationDuration: 1000,
 });
+
+const st = annotate(stack, {
+  type: "circle",
+  color: "#30ffcf",
+  animationDuration: 800,
+});
+
+const c = annotate(creative, {
+  type: "box",
+  color: "#ff8f66",
+  animationDuration: 800,
+});
+
+const line = annotate(timeLine, {
+  type: "underline",
+  color: "#6e81ff",
+  animationDuration: 800,
+});
+
+// Show only name annotation immediately
 annotation.show();
 
-
-const st = annotate(stack, { type: "circle", color: "#30ffcf", animationDuration: 800 });
-const c = annotate(creative, { type: "box", color: "#ff8f66", animationDuration: 800 });
-const line = annotate(timeLine, { type: "underline", color: "#6e81ff", animationDuration: 800 });
-
+// Show others when in view
 const observer = new IntersectionObserver((entries, obs) => {
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     if (entry.isIntersecting) {
       if (entry.target === stack) st.show();
       if (entry.target === creative) c.show();
       if (entry.target === timeLine) line.show();
-
-      // Optional: stop observing once shown
       obs.unobserve(entry.target);
     }
   });
-}, {
-  threshold: 0.5 // Adjust if needed
-});
+}, { threshold: 0.5 });
 
 observer.observe(stack);
 observer.observe(creative);
 observer.observe(timeLine);
+
+// 🔁 Refresh all annotations on layout changes
+function refreshAllAnnotations() {
+  annotation.hide(); annotation.show();
+  st.hide(); st.show();
+  c.hide(); c.show();
+  line.hide(); line.show();
+}
+
+window.addEventListener("resize", refreshAllAnnotations);
+
+// Optional: refresh after Bootstrap navbar toggle
+const navbarCollapse = document.getElementById("navbarColor03");
+if (navbarCollapse) {
+  navbarCollapse.addEventListener("transitionend", refreshAllAnnotations);
+}
+
 
 
 
